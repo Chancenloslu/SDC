@@ -27,13 +27,13 @@ public class Main {
 		System.out.printf("%nASAP%n%s%n", sched.diagnose());
 		System.out.printf("cost = %s%n", sched.cost());
 		
-		sched.draw("schedules/ASAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
+		sched.draw("scheduler-framework-master/schedules/ASAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
 		
 		s = new ALAP();
 		sched = s.schedule(g);
 		System.out.printf("%nALAP%n%s%n", sched.diagnose());
 		System.out.printf("cost = %s%n", sched.cost());
 		
-		sched.draw("schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
+		sched.draw("scheduler-framework-master/schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
 	}
 }

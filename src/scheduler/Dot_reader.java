@@ -37,9 +37,9 @@ public class Dot_reader {
 	
 	private void lex(BufferedReader input) {
 		String line;
-		Pattern pat_def = Pattern.compile("(\\w\\w*) (\\[.*\\]);.*");
-		Pattern pat_use = Pattern.compile("(\\w\\w*) -> (\\w\\w*);.*");
-		Pattern pat_itdep = Pattern.compile("(\\w\\w*) -> (\\w\\w*).*(\\[.*\\]);.*");
+		Pattern pat_def = Pattern.compile("(\\w\\d+) (\\[.*\\]);.*");
+		Pattern pat_use = Pattern.compile("(\\w\\d+) -> (\\w\\d+);.*");
+		Pattern pat_itdep = Pattern.compile("(\\w\\d+) -> (\\w\\d+).*(\\[.*\\]);.*");
 		Matcher m;
 		try {
 			line = input.readLine();
