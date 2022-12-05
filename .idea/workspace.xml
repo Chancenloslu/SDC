@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f99abbe4-f9a6-4729-adfa-2c5b1a873998" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/scheduler/SDC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f99abbe4-f9a6-4729-adfa-2c5b1a873998" name="Changes" comment="the second commit">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scheduler-framework-master/schedules/convGraphs.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scheduler-framework-master/schedules/convGraphs.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/Dot_reader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Dot_reader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scheduler/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scheduler/RC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/RC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scheduler/RT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/RT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scheduler/SDC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/SDC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scheduler/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Schedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/test1.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,16 +53,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/chris/IdeaProjects/test1/lib/SCPSolver.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
@@ -103,7 +106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669301466910</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="the second commit">
+      <created>1669646166481</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669646166481</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -119,6 +129,23 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="the first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="the first commit" />
+    <MESSAGE value="the second commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="the second commit" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/scheduler/Main.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="key" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

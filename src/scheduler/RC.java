@@ -51,7 +51,7 @@ public class RC {
 					for(int i = 1; i<opArray.length; i++){
 						RT currOp = RT.getRT(opArray[i]);
 						ops.add(currOp);							//Add operation to list of ops that this resource can execute
-						operations.get(currOp).add(opArray[0]);		// opArray[0] is the name of RES e.g. RES00
+						operations.get(currOp).add(opArray[0]);		// opArray[0] is the name of RES e.g.RES00
 																	// Add resource to list of res that can execute that op
 					}
 					res.put(opArray[0], ops);

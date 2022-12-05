@@ -411,7 +411,11 @@ public class Schedule {
 						int nodeHeight = n.getDelay() * scaleY - 1;
 						int nodeY = Y - nodeHeight/2; 
 						int nodeWidth = 1;
-						dotFile.write(n.toString() + "[shape=\"ellipse\", style=\"filled\", color=\"#004E8ABF\", pos=\"" + X + "," + nodeY + "!\", height=\"" + nodeHeight + "\", width=\"" + nodeWidth + "\"];\n");
+						/**
+						 * For nodes, the position indicates the center of the node
+						 * label need to be placed at the first place
+						 */
+						dotFile.write(n.toString() + "[label=\"" + n.toString()  + "\\n" + n.getRT().getName() + "\"" + "shape=\"ellipse\", style=\"filled\", color=\"#004E8ABF\", pos=\"" + X + "," + nodeY + "!\", height=\"" + nodeHeight + "\", width=\"" + nodeWidth + "\"];\n");
 						for(Node suc : n.successors()){
 							dotFile.write(n.toString() + " -> " + suc + ";\n");
 						}

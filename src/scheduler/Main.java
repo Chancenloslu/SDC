@@ -35,5 +35,13 @@ public class Main {
 		System.out.printf("cost = %s%n", sched.cost());
 		
 		sched.draw("scheduler-framework-master/schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
+
+		/**
+		 * TODO: reorder the Graph with RC and DC
+		 */
+
+		SDC sdc = new SDC(sched);
+		sdc.generateEq(Boolean.TRUE);
+
 	}
 }
