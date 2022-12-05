@@ -10,6 +10,7 @@ public class SDC {
 
     private HashMap<Node, Integer> starting_time;
     private HashSet<Equation> data_dependency;
+    private HashSet<Equation> resource_constraint;
     public SDC(Schedule schedule) {
         this.schedule = schedule;
         data_dependency = new HashSet<Equation>();

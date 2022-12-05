@@ -37,11 +37,16 @@ public class Main {
 		sched.draw("scheduler-framework-master/schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
 
 		/**
-		 * TODO: reorder the Graph with RC and DC
+		 * TODO: reorder the Nodes with RC and DD
 		 */
 
 		SDC sdc = new SDC(sched);
 		sdc.generateEq(Boolean.TRUE);
+		/**
+		 * TODO: we can use an array or listarray to note the integer sequence of the nodes.
+		 * If there is a tie using ALAP, use an ASAP as tie breaker. Take a more later one.
+		 *
+		 */
 
 	}
 }
