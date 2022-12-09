@@ -1,0 +1,5 @@
+//do not use DOT to generate pdf use NEATO or FDP
+digraph{
+layout="neato";
+splines="ortho";
+}
