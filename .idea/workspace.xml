@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f99abbe4-f9a6-4729-adfa-2c5b1a873998" name="Changes" comment="the first commit">
+    <list default="true" id="f99abbe4-f9a6-4729-adfa-2c5b1a873998" name="Changes" comment="add reordeing and sorted resource instance">
+      <change afterPath="$PROJECT_DIR$/src/scheduler/ProblemReader.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/scheduler/RTTop.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/scheduler/Reorder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/ALAP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/ALAP.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/ListScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/ListScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/RC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/RC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/RT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/RT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/SDC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/SDC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Schedule.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scheduler/ScheduleReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scheduler/Validator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670595544175</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add reordeing and sorted resource instance">
+      <created>1671397571287</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1671397571287</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -128,7 +131,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="the first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="the first commit" />
+    <MESSAGE value="add reordeing and sorted resource instance" />
+    <option name="LAST_COMMIT_MESSAGE" value="add reordeing and sorted resource instance" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
