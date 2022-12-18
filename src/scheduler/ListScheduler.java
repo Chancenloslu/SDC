@@ -51,14 +51,14 @@ public class ListScheduler extends Scheduler {
 		ArrayList<Node> priorityList = new ArrayList<Node>();
 
 		int priority = 0; // 0 is highest priority ( minimum mobility )
-		while(priority <= maxMobility){
+		while(priority <= maxMobility){	//priority here is equivalent to mobility
 			List<Node> removeNodes = new ArrayList<Node>();
 			for(Map.Entry<Node, Integer> e : mobilityMap.entrySet()){
 				Node node = e.getKey();
 				int tempPriority = e.getValue();
 				if(tempPriority == priority){
-					priorityList.add(node);
-					removeNodes.add(node);
+					priorityList.add(node);		//list of nodes that need to be processed firstly
+					removeNodes.add(node);		//list of nodes that can be handled
 				}
 			}
 			for(Node n : removeNodes){

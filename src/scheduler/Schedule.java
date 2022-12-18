@@ -27,15 +27,15 @@ public class Schedule {
 	/**
 	 * Map of resource types and a sorted mapping of resources and the time steps they are used in
 	 */
-	private Map<RT, TreeMap<Resource, Integer>> sort_res;
+	private final Map<RT, TreeMap<Resource, Integer>> sort_res;
 	/**
 	 * Map of resource types and a sorted mapping of the time steps and resource that is used
 	 */
-	private Map<RT, Map<Integer, Resource>> tsort_res;
+	private final Map<RT, Map<Integer, Resource>> tsort_res;
 	/**
 	 * Map of nodes and the resource used for this node
 	 */
-	private Map<Node, String> resources = new HashMap<Node, String>();
+	private final Map<Node, String> resources = new HashMap<>();
 		
 	public Schedule() {
 		nodes = new HashMap<Node, Interval>();
@@ -43,7 +43,15 @@ public class Schedule {
 		sort_res = new HashMap<RT, TreeMap<Resource, Integer>>();
 		tsort_res = new HashMap<RT, Map<Integer, Resource>>();
 	}
-	
+
+	public Map<RT, TreeMap<Resource, Integer>> getSort_res() {
+		return sort_res;
+	}
+
+	public Map<Integer, Set<Node>> getSlots() {
+		return slots;
+	}
+
 	/**
 	 * Add a node and to the schedule during the given interval
 	 * @param nd - the node to be scheduled
@@ -63,16 +71,8 @@ public class Schedule {
 			slots.put(ii, ss);
 			
 			{
-				TreeMap<Resource, Integer> rmm = sort_res.get(nd.getRT());
-				if (rmm == null) {
-					rmm = new TreeMap<Resource, Integer>();
-					sort_res.put(nd.getRT(), rmm);
-				}
-				Map<Integer, Resource> rtm = tsort_res.get(nd.getRT());
-				if (rtm == null) {
-					rtm = new HashMap<Integer, Resource>();
-					tsort_res.put(nd.getRT(), rtm);
-				}
+				TreeMap<Resource, Integer> rmm = sort_res.computeIfAbsent(nd.getRT(), k -> new TreeMap<Resource, Integer>());
+				Map<Integer, Resource> rtm = tsort_res.computeIfAbsent(nd.getRT(), k -> new HashMap<Integer, Resource>());
 				Resource rss = rtm.get(ii);
 				if (rss == null) {
 					rss = new Resource(nd.getRT(), ii);
@@ -240,7 +240,7 @@ public class Schedule {
 	 * @return this schedule's length
 	 */
 	public Integer length() {
-		Integer min, max;
+		int min, max;
 		min = Integer.MAX_VALUE;
 		max = Integer.MIN_VALUE;
 		for (Integer ii : slots.keySet()) {
@@ -284,7 +284,7 @@ public class Schedule {
 	 * Check the schedule for simple conflicts. If any node overlaps its successors the first conflicting node is returned.
 	 * @return null iff the schedule has no illegal overlaps, a conflicting node otherwise
 	 */
-	public Node validate() {
+	public Node validateDependencies() {
 		for (Node nd : nodes.keySet())
 			for (Node sn : nd.successors()) {
 				if (slot(sn) == null)
@@ -293,6 +293,30 @@ public class Schedule {
 					return nd;
 				}
 			}
+		return null;
+	}
+
+	/**
+	 * Check the schedule for resource usage conflicts. If any resource overuse is detected, the first responsible node is returned.
+	 * @return null iff the schedule is not resource constrained or has no resource overuses, a responsible node otherwise
+	 */
+	public Node validateResources() {
+
+		if (resources.isEmpty())
+			return null;
+
+		for (int i = 0; i < slots.size(); i ++) {
+
+			Set<Node> nodeSet = slots.get(i);
+			Set<String> usedResources = new HashSet<>();
+
+			for (Node node : nodeSet) {
+
+				if (!usedResources.add(resources.get(node))) {
+					return node;
+				}
+			}
+		}
 		return null;
 	}
 
@@ -334,12 +358,14 @@ public class Schedule {
 	/**
 	 * Write a dot-file of the schedule. If a resource is specified for each node each column of the schedule represents one resource.
 	 * @param dotFileName - the file to be written
+	 * @param problemName - the name of the scheduling problem the schedule refers to
+	 * @param resourceName - the name of the resource file used if the schedule is resource constrained or null otherwise
 	 */
-	public void draw(String dotFileName) {
+	public void draw(String dotFileName, String problemName, String resourceName) {
 		try {
 			BufferedWriter dotFile = new BufferedWriter(new FileWriter(dotFileName));
 			int scaleY = 2;
-			int scaleX = 2;
+			int scaleX = 3;
 			int maxY = length() * scaleY;
 
 			int X = 0;
@@ -352,10 +378,20 @@ public class Schedule {
 			dotFile.write("layout=\"neato\";\n");
 			dotFile.write("splines=\"ortho\";\n");
 
+			if (problemName == null) {
+				throw new IOException("No problem name given! Aborting DOT creation.");
+			}
+
+			dotFile.write("label=\"" + problemName + "\"\n");
+			dotFile.write("labelloc  =  t\n");
+
+			if (resourceName != null)
+				dotFile.write("comment=\"" + resourceName + "\"\n");
+
 			int maxNodes = 0;
 
 			for (int i = 0; i <= max(); i++) {
-				if (nodes(i) != null) maxNodes = nodes(i).size() > maxNodes ? nodes(i).size() : maxNodes;
+				if (nodes(i) != null) maxNodes = Math.max(nodes(i).size(), maxNodes);
 			}
 
 			boolean allResourcesGiven = true;
@@ -368,11 +404,15 @@ public class Schedule {
 
 			int[] slots = new int[maxNodes];
 
-			Map<String, Integer> peSlots = new HashMap<String, Integer>();
+			Map<String, Integer> peSlots = new HashMap<>();
+
 			if (allResourcesGiven) {
 				int x = 0;
 				for (String s : resources.values()) {
-					peSlots.put(s, x++);
+					if (!peSlots.containsKey(s)) {
+						peSlots.put(s, x);
+						x++;
+					}
 				}
 			} else {
 				for (int i = 0; i < maxNodes; i++) {
@@ -411,10 +451,7 @@ public class Schedule {
 						int nodeHeight = n.getDelay() * scaleY - 1;
 						int nodeY = Y - nodeHeight/2; 
 						int nodeWidth = 1;
-						/**
-						 * For nodes, the position indicates the center of the node
-						 * label need to be placed at the first place
-						 */
+						String resourceTag = resources.get(n) != null ? resources.get(n) : "-";
 						dotFile.write(n.toString() + "[label=\"" + n.toString()  + "\\n" + n.getRT().getName() + "\"" + "shape=\"ellipse\", style=\"filled\", color=\"#004E8ABF\", pos=\"" + X + "," + nodeY + "!\", height=\"" + nodeHeight + "\", width=\"" + nodeWidth + "\"];\n");
 						for(Node suc : n.successors()){
 							dotFile.write(n.toString() + " -> " + suc + ";\n");

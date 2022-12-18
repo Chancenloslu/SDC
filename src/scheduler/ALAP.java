@@ -48,6 +48,7 @@ public class ALAP extends Scheduler {
 						ii = new Interval(slot.lbound-l.getDelay(), slot.lbound-1);
 						min_queue.put(l, ii);
 					}
+					/* test if l has unhandled successor*/
 					if (!l.bottom())
 						continue;
 					if ((queue.get(l) == null)) {
@@ -69,5 +70,4 @@ public class ALAP extends Scheduler {
 			return schedule.shift(-(min));
 		return schedule;
 	}
-
 }

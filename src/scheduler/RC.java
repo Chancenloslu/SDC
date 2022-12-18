@@ -3,11 +3,7 @@ package scheduler;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,11 +11,12 @@ public class RC {
 	/**
 	 * Maps each resource to a set of supported types
 	 */
-	private Map<String, Set<RT> > res;
+	private Map<String, Set<RT>> res;
 	/**
 	 * Maps each resource type to a set of all resources that are compatible with this type
 	 */
 	private Map<RT, Set<String>> operations;
+	private Map<Set<RT>, Integer> resInst;
 	
 	public RC(){
 		res = new TreeMap<String, Set<RT>>();
@@ -27,6 +24,7 @@ public class RC {
 		for(RT op: RT.values()){
 			operations.put(op, new TreeSet<String>());
 		}
+		resInst = new HashMap<Set<RT>, Integer>();
 	}
 	
 	/**
@@ -51,8 +49,7 @@ public class RC {
 					for(int i = 1; i<opArray.length; i++){
 						RT currOp = RT.getRT(opArray[i]);
 						ops.add(currOp);							//Add operation to list of ops that this resource can execute
-						operations.get(currOp).add(opArray[0]);		// opArray[0] is the name of RES e.g.RES00
-																	// Add resource to list of res that can execute that op
+						operations.get(currOp).add(opArray[0]);		//Add resource to list of res that can execute that op
 					}
 					res.put(opArray[0], ops);
 				}
@@ -64,7 +61,8 @@ public class RC {
 			e.printStackTrace(System.err);
 			System.exit(-1);
 		}
-		
+		// get the resInst of different kinds
+		genResInst();
 		
 		// Print ops
 		System.out.println("Available resources:");
@@ -87,6 +85,22 @@ public class RC {
 			System.out.println();
 		}
 		System.out.println();
+	}
+
+	private void genResInst() {
+		for (Set set: res.values()) {
+			Integer num;
+			if(resInst.containsKey(set)) {
+				num = resInst.get(set) + 1;
+			}else {
+				num = 1;
+			}
+			resInst.put(set, num);
+		}
+	}
+
+	public Map<Set<RT>, Integer> getResInst() {
+		return resInst;
 	}
 
 	/**

@@ -33,11 +33,7 @@ public enum RT {
 		this.weight = weight;
 		this.name = name;
 	}
-
-	public String getName() {
-		return name;
-	}
-
+	
 	/**
 	 * Get the resource type for the given string. 
 	 * @param id - the ID of the node to get the resource type from
@@ -68,4 +64,9 @@ public enum RT {
 			return RT.OTHER;
 		}
 	}
+
+    public String getName() {
+		return name;
+    }
 }
+
