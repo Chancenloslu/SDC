@@ -1,8 +1,10 @@
 package scheduler;
 
+import lpsolve.LpSolveException;
+
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LpSolveException {
 
 		RC rc = null;
 		String resourcesName = null;
@@ -45,8 +47,13 @@ public class Main {
 //		Reorder reord = new Reorder(rc);
 //		Schedule sched3 = reord.schedule(sched1, sched2);
 		SDC sdc = new SDC(sched1, sched2, rc);
-		sdc.generateEq();
+		Schedule sched3 = sdc.runSolver(2);
 
+		s = new ListScheduler(rc);
+		Schedule sched4 = s.schedule(g);
+		System.out.printf("%nlist scheduler%n%s%n", sched4.diagnose());
+		System.out.printf("cost = %s%n", sched4.cost());
+		sched3.draw("scheduler-framework-master/schedules/ListScheduler_" + problemName, problemName,null);
 
 		/* exemplary validation of a schedule */
 		/*

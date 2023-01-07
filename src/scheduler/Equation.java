@@ -13,6 +13,37 @@ public class Equation {
     private ineqOp Op;
     private int rhs;
 
+    public Node getPred() {
+        return pred;
+    }
+
+    public void setPred(Node pred) {
+        this.pred = pred;
+    }
+
+    public Node getSucc() {
+        return succ;
+    }
+
+    public void setSucc(Node succ) {
+        this.succ = succ;
+    }
+
+    public ineqOp getOp() {
+        return Op;
+    }
+
+    public void setOp(ineqOp op) {
+        Op = op;
+    }
+
+    public int getRhs() {
+        return rhs;
+    }
+
+    public void setRhs(int rhs) {
+        this.rhs = rhs;
+    }
 
     public Equation(Node pred, Node succ, ineqOp mathOp, int rhs) {
         this.pred = pred;
@@ -23,26 +54,23 @@ public class Equation {
 
     @Override
     public String toString() {
-        String OpToPrint;
+        String OpToPrint = "";
         switch (Op){
             case smallerThan:
-                OpToPrint = "<";
+                OpToPrint = " < ";
                 break;
             case smallerThanEqual:
-                OpToPrint = "<=";
+                OpToPrint = " <= ";
                 break;
             case biggerThan:
-                OpToPrint = ">";
+                OpToPrint = " > ";
                 break;
             case biggerThanEqual:
-                OpToPrint = ">=";
+                OpToPrint = " >= ";
                 break;
             default:
                 break;
         }
-        return "Equation{" + pred +
-                ", succ=" + succ +
-                ", rhs=" + rhs +
-                '}';
+        return  pred + "\t - \t" + succ + "\t" + OpToPrint + "\t" + rhs;
     }
 }
