@@ -16,16 +16,31 @@ import java.util.regex.Pattern;
 
 public class SDC {
 
-    private ArrayList<Node> sequence;
-    private RC rc;
-    private HashMap<Node, Integer> starting_time;
-    private ArrayList<Equation> eqDD;
-    private ArrayList<Equation> eqRC;
+    private final ArrayList<Node> sequence;
+    private final RC rc;
+    private final int startIndexOfNode;
+    Pattern p = Pattern.compile("(\\w(\\d+)(\\w*))");
+    private final ArrayList<Equation> eqDD;
+    private final ArrayList<Equation> eqRC;
     public SDC(Schedule schedOfASAP, Schedule schedOfALAP, RC rc) {
         this.rc = rc;
         this.sequence = doReorder(schedOfASAP, schedOfALAP);
+        this.startIndexOfNode = getStartIndex();
         this.eqDD = new ArrayList<>();
         this.eqRC = new ArrayList<>();
+    }
+
+    private int getStartIndex() {
+        int ret = Integer.MAX_VALUE;
+        Matcher m;
+        for (Node n: sequence) {
+            m = p.matcher(n.id);
+            if (m.matches()) {
+                int index = Integer.parseInt(m.group(2));
+                ret = Math.min(index, ret);
+            }
+        }
+        return ret;
     }
 
     /**
@@ -45,27 +60,26 @@ public class SDC {
             for (Node n: entry.getValue()){
                 tmpRes.put(n, schedOfASAP.slot(n).lbound);
             }
-            List<Map.Entry<Node, Integer>> list = new ArrayList(tmpRes.entrySet());
+            List<Map.Entry<Node, Integer>> list = new ArrayList<>(tmpRes.entrySet());
             Collections.sort(list, (o1, o2) -> (o1.getValue().compareTo(o2.getValue())));
             for (Map.Entry<Node, Integer> n: list) {
                 if (!toRe.contains(n.getKey())) toRe.add(n.getKey());
             }
         }
-
         return toRe;
     }
-
+    /**
+     * for all Res in ResC
+     *      ResK
+     *      for all source instance of ResK
+     *          this time of utilization of Resk is Vi
+     *          find the next usage of this Resource instance Vj
+     *          but ensure that the number of resource k between Vi and Vj = Cresk - 1
+     *          vi - vj <= - Latency(Vi)
+     */
     private void generateRC(){
         //int c_res_k =
-        /**
-         * for all Res in ResC
-         *      ResK
-         *      for all source instance of ResK
-         *          this time of utilization of Resk is Vi
-         *          find the next usage of this Resource instance Vj
-         *          but ensure that the number of resource k between Vi and Vj = Cresk - 1
-         *          vi - vj <= - Latency(Vi)
-         */
+
         /* parse the resource Instance & map the nodes to it */
         Map<Set<RT>, Integer> resInst = rc.getResInst();
         Map<Set<RT>, ArrayList<Node>> resInst2Node = new HashMap<>(); //get the resource instance used by diff ops
@@ -120,23 +134,107 @@ public class SDC {
         }
     }
 
+    /**
+     * one implementation of lp solver from lp solver reference guide menu
+     * @return a schdule
+     * @throws LpSolveException an exception to lp_solver
+     */
     public Schedule lp_solver() throws LpSolveException {
         Schedule toRe = new Schedule();
         LpSolve lp;
-        int ret;
+        int ret = 0;
         int Ncol = sequence.size();
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
+        ArrayList<Equation> eqConstraint = new ArrayList<>(eqDD);
+        eqConstraint.addAll(eqRC);
+
         lp = LpSolve.makeLp(0, Ncol);
+
+        Matcher m;
         if(lp.getLp() == 0)
             ret = 1;  //couldn't construct a new model...
+        /* construct a lpsolver */
+        if(ret == 0){
+            for (Node n: sequence){
+                String nodeName = n.id;
+                m = p.matcher(nodeName);
+                if(m.matches()) {
+                    int index = Integer.parseInt(m.group(2)) + 1 - startIndexOfNode;
+                    lp.setColName(index, nodeName);
+                }
+            }
+            lp.setAddRowmode(true);
 
+            /* add the constraint equations */
+            for (int i = 0; i < colno.length; i++) {
+                colno[i] = i + 1;
+            }
+            for (int i=0; i< eqConstraint.size(); i++) {
+                Arrays.fill(row, 0);
+                Equation eq = i<eqDD.size() ? eqDD.get(i) : eqRC.get(i-eqDD.size());
+                m = p.matcher(eq.getPred().id);
+                if (m.matches()){
+                    int index = Integer.parseInt(m.group(2)) - startIndexOfNode;
+                    row[index] = 1.0;
+                }
+                m = p.matcher(eq.getSucc().id);
+                if(m.matches()){
+                    int index = Integer.parseInt(m.group(2)) - startIndexOfNode;
+                    row[index] = -1.0;
+                }
+                int op;
+                switch(eq.getOp()) {
+                    case biggerThanEqual: op = LpSolve.GE; break;
+                    case smallerThanEqual: op = LpSolve.LE; break;
+                    default: op = LpSolve.FR; break;
+                }
+                lp.addConstraintex(Ncol, row, colno, op, eq.getRhs());
+            }
+
+            /* add onjective function */
+            lp.setAddRowmode(false);
+            Arrays.fill(row, 0);
+
+            m = p.matcher(sequence.get(Ncol - 1).id);
+            if (m.matches()) {
+                int index = Integer.parseInt(m.group(2)) - startIndexOfNode;
+                row[index] = 1.0;
+            }
+            lp.setObjFnex(Ncol, row, colno);
+            lp.setMinim();
+            lp.setVerbose(LpSolve.IMPORTANT);
+            ret = lp.solve();
+            if(ret == LpSolve.OPTIMAL)
+                ret = 0;
+            else
+                ret = 5;
+            /* objective value */
+            double objective = lp.getObjective() + sequence.get(Ncol-1).getDelay();
+            System.out.println("Objective value: " + objective);
+            /* variable values */
+            lp.getVariables(row);
+            for(int j = 0; j < Ncol; j++)
+                System.out.println(lp.getColName(j + 1) + ": " + row[j]);
+        }
+
+        /* to produce the schedule */
+        for (int i = 0; i < Ncol; i++) {
+            Node n = sequence.get(i);
+            m = p.matcher(n.id);
+            if (m.matches()) {
+                int index = Integer.parseInt(m.group(2)) - startIndexOfNode;
+                int timeSlot = (int)row[index];
+                int end = timeSlot + n.getDelay() - 1;
+                toRe.add(n, new Interval(timeSlot, end), n.getRT().name);
+            }
+        }
         return toRe;
     }
 
     /**
      * low level interface solver
-     * @return
+     * @return a schedule
      */
     public Schedule ll_solver() {
         Schedule toRe = new Schedule();
@@ -146,7 +244,6 @@ public class SDC {
         int Nrow = eqConstraint.size();
 
         double[][] matrix = new double[Nrow][Ncol];
-        Pattern p = Pattern.compile("(n(\\d+))");
         Matcher m;
         for (int i=0; i<Nrow; i++) {
             Equation eq = i<eqDD.size() ? eqDD.get(i) : eqRC.get(i-eqDD.size());
@@ -176,13 +273,13 @@ public class SDC {
         LinearProgramSolver solver = SolverFactory.newDefault();
         double[] sol = solver.solve(lp);
         LPSolution losol = new LPSolution(sol, lp);
-        System.out.println(losol);
+        //System.out.println(losol);
         return toRe;
     }
 
     /**
      * high level interface solver
-     * @return
+     * @return a schedule
      */
     public Schedule hl_solver()  {
         Schedule ret = new Schedule();
@@ -193,7 +290,7 @@ public class SDC {
         for (int i=1; i<sequence.size(); i++) {
             tmpLpw = tmpLpw.plus(sequence.get(i).id,1.0);
         }*/
-        lpw.plus("n20", 1.0);
+        lpw.plus(sequence.get(sequence.size()-1).id, 1.0);
         lpw.setMinProblem(true);
         //lpw.addConstraint("c0", t_total, ">=").plus(finalnode, 1.0);
         /* constraint of data dependancies*/
@@ -243,7 +340,6 @@ public class SDC {
 
         LPSolution lps = lpw.solve();
         System.out.println(lps);
-
         for (int i = 0; i < sequence.size(); i++) {
             Node n = sequence.get(i);
             int timeSlot = (int) lps.getInteger(n.id);
@@ -252,10 +348,17 @@ public class SDC {
         }
         return ret;
     }
-    public Schedule runSolver (int seletion) {
-        Schedule res = null;
+
+    /**
+     * Here are 3 methods provided, which lp solver, low level interface SCP solver, high level interface SCP solver
+     * @param selection choose which Solver to run
+     * @return a schedule solved by one of the solver above
+     */
+    public Schedule runSolver (int selection) {
+        Schedule res;
         generateEq();
-        switch (seletion) {
+        System.out.println("\nStarting SDC scheduling with Solver: " + (selection == 0 ? "lp solver" : (selection == 1 ? "low level interface SCP Solver" : "high level interface SCP Solver" + "\n")));
+        switch (selection) {
             case 0:
                 try {
                     res = lp_solver();
@@ -276,7 +379,9 @@ public class SDC {
         return res;
     }
     public void generateEq(){
-            generateDD();
-            generateRC();
+        System.out.println("\nReordered sequence:");
+        System.out.println(sequence);
+        generateDD();
+        generateRC();
     }
 }

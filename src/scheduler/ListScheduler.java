@@ -66,9 +66,9 @@ public class ListScheduler extends Scheduler {
 			}
 			priority++;
 		}
-		for(Node n : priorityList){
-			System.out.println(n);
-		}
+
+		System.out.println("\nPriority list of list scheduler");
+		System.out.println(priorityList);
 
 		sched = new Schedule();
 		HashMap<String, Integer> usedResources = new HashMap<String, Integer>();

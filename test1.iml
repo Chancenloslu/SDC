@@ -25,5 +25,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="LPSOLVESolverPack" level="project" />
+    <orderEntry type="library" name="SCPSolver" level="project" />
   </component>
 </module>
