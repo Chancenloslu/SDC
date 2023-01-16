@@ -11,6 +11,15 @@ Then it will be solved by the [SCP Solver](http://scpsolver.org/).
 ## File
 1. [SDC](src/scheduler/SDC.java): detailed implementation of SDC scheduler.
 2. [Equation](src/scheduler/Equation.java): class used to construct the constraints equations
+## How to run the Solver
+### One method
+You can just **clone** this project and **open** it with IntelliJ IDEA, **configure** the parameter 
+you want to give to Main() and then **run**.
+### Alternative method
+If you have already packaged the project, just run the command 
+```
+java -jar test1.jar ~/path/to/dotfile ~/path/to/resource
+```
 ## Note
 There are three implementations of solver in SDC.
 * high level interface SCP solver.

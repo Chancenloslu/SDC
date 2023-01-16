@@ -19,6 +19,7 @@ public class SDC {
     private final ArrayList<Node> sequence;
     private final RC rc;
     private final int startIndexOfNode;
+    private final Node objectiveNode;
     Pattern p = Pattern.compile("(\\w(\\d+)(\\w*))");
     private final ArrayList<Equation> eqDD;
     private final ArrayList<Equation> eqRC;
@@ -26,10 +27,34 @@ public class SDC {
         this.rc = rc;
         this.sequence = doReorder(schedOfASAP, schedOfALAP);
         this.startIndexOfNode = getStartIndex();
+        this.objectiveNode = getObjective(schedOfASAP);
         this.eqDD = new ArrayList<>();
         this.eqRC = new ArrayList<>();
     }
 
+    private Node getObjective(Schedule schedOfASAP) {
+        Node ret = null;
+        int timeMax = Integer.MIN_VALUE;
+
+        Map<Integer, Set<Node>> nodesSlots = schedOfASAP.getSlots();
+        List<Integer> slots = new ArrayList<>(nodesSlots.keySet());
+        int finalSlots = slots.get(slots.size()-1);
+        Set<Node> nodesFinalSlots = nodesSlots.get(finalSlots);
+
+        for (Node n: nodesFinalSlots) {
+            int t_total = finalSlots + n.getDelay();
+            if(t_total > timeMax){
+                timeMax = t_total;
+                ret = n;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * to get the start index of nodes in a Graph. This parameter is important for following algorithm.
+     * @return the start index
+     */
     private int getStartIndex() {
         int ret = Integer.MAX_VALUE;
         Matcher m;
@@ -196,7 +221,7 @@ public class SDC {
             lp.setAddRowmode(false);
             Arrays.fill(row, 0);
 
-            m = p.matcher(sequence.get(Ncol - 1).id);
+            m = p.matcher(objectiveNode.id);
             if (m.matches()) {
                 int index = Integer.parseInt(m.group(2)) - startIndexOfNode;
                 row[index] = 1.0;
@@ -210,7 +235,8 @@ public class SDC {
             else
                 ret = 5;
             /* objective value */
-            double objective = lp.getObjective() + sequence.get(Ncol-1).getDelay();
+            double objective = lp.getObjective();
+            objective += objectiveNode.getDelay();
             System.out.println("Objective value: " + objective);
             /* variable values */
             lp.getVariables(row);
