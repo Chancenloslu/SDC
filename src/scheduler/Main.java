@@ -88,7 +88,7 @@ public class Main {
 		Schedule sched4 = s.schedule(g);
 		endTime = System.currentTimeMillis();
 		System.out.printf("%nlist scheduler%n%s%n", sched4.diagnose());
-		System.out.printf("cost = %s%n", sched4.cost());
+		System.out.printf("cost  = %s%n", sched4.cost());
 		System.out.println("run time of list scheduler: " + (endTime - startTime) + "ms");
 		sched4.draw("scheduler-framework-master/schedules/ListScheduler_" + problemName, problemName,null);
 
