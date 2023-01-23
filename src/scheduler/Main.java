@@ -72,15 +72,24 @@ public class Main {
 		System.out.printf("cost = %s%n", sched2.cost());
 
 		//sched2.draw("scheduler-framework-master/schedules/ALAP_" + problemName, problemName, null);
-
+		System.out.println("\n\n**************************************");
+		System.out.println("****              SDC             ****");
+		long startTime=System.currentTimeMillis();
 		SDC sdc = new SDC(sched1, sched2, rc);
 		Schedule sched3 = sdc.runSolver(0);
+		long endTime=System.currentTimeMillis();
+		System.out.println("run time of SDC: " + (endTime - startTime) + "ms");
 		sched3.draw("scheduler-framework-master/schedules/SDCScheduler_" + problemName, problemName,null);
 
+		System.out.println("\n\n**************************************");
+		System.out.println("****       list scheduler         ****");
+		startTime = System.currentTimeMillis();
 		s = new ListScheduler(rc);
 		Schedule sched4 = s.schedule(g);
+		endTime = System.currentTimeMillis();
 		System.out.printf("%nlist scheduler%n%s%n", sched4.diagnose());
 		System.out.printf("cost = %s%n", sched4.cost());
+		System.out.println("run time of list scheduler: " + (endTime - startTime) + "ms");
 		sched4.draw("scheduler-framework-master/schedules/ListScheduler_" + problemName, problemName,null);
 
 		/* exemplary validation of a schedule */

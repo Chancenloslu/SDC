@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f99abbe4-f9a6-4729-adfa-2c5b1a873998" name="Changes" comment="runSolver succeeded">
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scheduler-framework-master/schedules/ALAP_SerpentEngine-makeWorkingKey-15-82.dot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scheduler-framework-master/schedules/ASAP_SerpentEngine-makeWorkingKey-15-82.dot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scheduler/SDC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/SDC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scheduler/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673456223724</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="runSolver succeeded">
+      <created>1673864139948</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1673864139948</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -199,7 +202,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/scheduler/Main.java</url>
-          <line>80</line>
+          <line>87</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
       </breakpoints>
