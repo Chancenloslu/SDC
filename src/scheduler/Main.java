@@ -34,7 +34,7 @@ public class Main {
 
 		lpw.setMinProblem(true);
 		LPSolution lps = lpw.solve();
-		System.out.println(lps);
+		//System.out.println(lps);
 
 		/* start parse the graph and resource constraints */
 		RC rc = null;
